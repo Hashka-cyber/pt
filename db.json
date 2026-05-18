@@ -1,0 +1,18 @@
+{
+  "plants": [
+    {
+      "id": 1,
+      "name": "Monstera",
+      "image": "https://images.unsplash.com/photo-1614594975525-e45190c55d0b",
+      "price": 12.99,
+      "soldOut": false
+    },
+    {
+      "id": 2,
+      "name": "Snake Plant",
+      "image": "https://images.unsplash.com/photo-1593691509543-c55fb32e5f19",
+      "price": 15.99,
+      "soldOut": false
+    }
+  ]
+}
