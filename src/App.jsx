@@ -1,56 +1,52 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import "./App.css";
+
 import PlantCard from "./components/PlantCard";
-import Search from "./components/Search"; 
 import PlantForm from "./components/PlantForm";
+import Search from "./components/Search";
 
 function App() {
-  const [plants, setPlants]         = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [plants, setPlants] = useState([]);
+  const [search, setSearch] = useState("");
 
-  // Task 1: Fetch all plants on load
+  // Fetch plants on page load
   useEffect(() => {
     fetch("http://localhost:6001/plants")
-      .then((res) => res.json())
+      .then((response) => response.json())
       .then((data) => setPlants(data));
   }, []);
 
-  // Task 2: Add plant
-  function handleAddPlant(newPlantData) {
+  // Add new plant
+  function handleAddPlant(newPlant) {
     fetch("http://localhost:6001/plants", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newPlantData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newPlant),
     })
-      .then((res) => res.json())
-      .then((saved) => setPlants((prev) => [...prev, saved]));
+      .then((response) => response.json())
+      .then((addedPlant) => {
+        setPlants([...plants, addedPlant]);
+      });
   }
 
-  // Task 3: Toggle stock (state only)
-  function handleToggleInStock(id) {
-    setPlants((prev) =>
-      prev.map((plant) =>
-        plant.id === id ? { ...plant, inStock: !plant.inStock } : plant
-      )
-    );
-  }
-
-  // Task 4: Filter for search
-  const displayedPlants = plants.filter((plant) =>
-    plant.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // Filter plants
+  const filteredPlants = plants.filter((plant) =>
+    plant.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div className="app">
-      <h1>🌿 Plant Shop</h1>
+    <div className="App">
+      <h1>🌱 Plant Shop</h1>
+
+      <Search search={search} setSearch={setSearch} />
+
       <PlantForm onAddPlant={handleAddPlant} />
-      <Search searchTerm={searchTerm} onSearchChange={setSearchTerm} />
-      <div className="plant-list">
-        {displayedPlants.map((plant) => (
-          <PlantCard
-            key={plant.id}
-            plant={plant}
-            onToggleInStock={handleToggleInStock}
-          />
+
+      <div className="plant-container">
+        {filteredPlants.map((plant) => (
+          <PlantCard key={plant.id} plant={plant} />
         ))}
       </div>
     </div>

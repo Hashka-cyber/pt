@@ -1,15 +1,25 @@
-import React from "react";
+import { useState } from "react";
 
-function PlantCard({ plant, onToggleInStock }) {
+function PlantCard({ plant }) {
+  const [soldOut, setSoldOut] = useState(plant.soldOut);
+
+  function handleSoldOut() {
+    setSoldOut(true);
+  }
+
   return (
     <div className="plant-card">
       <img src={plant.image} alt={plant.name} />
-      <h3>{plant.name}</h3>
-      <p>Price: ${plant.price}</p>
-      <p>{plant.inStock ? "In Stock ✅" : "Out of Stock ❌"}</p>
-      <button onClick={() => onToggleInStock(plant.id)}>
-        {plant.inStock ? "Mark Out of Stock" : "Mark In Stock"}
-      </button>
+
+      <h2>{plant.name}</h2>
+
+      <p>${plant.price}</p>
+
+      {soldOut ? (
+        <button disabled>Sold Out</button>
+      ) : (
+        <button onClick={handleSoldOut}>Mark as Sold Out</button>
+      )}
     </div>
   );
 }
